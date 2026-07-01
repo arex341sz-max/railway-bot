@@ -3,261 +3,257 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>نصب خودکار پنل X-U روی Railway</title>
+<title>نصب خودکار پنل X-UI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg:#0f1115; --card:#171a21; --border:#262b36; --text:#e7e9ee;
-    --muted:#9aa3b2; --accent:#6c5ce7; --accent2:#00d1a0; --danger:#ff5d5d;
+    --bg:#0a0b0f; --bg2:#0e1015;
+    --card:#14161d; --card-border:#22252f;
+    --text:#eef0f5; --muted:#8b90a0;
+    --accent:#7c5cff; --accent2:#00e0a4; --accent3:#ff5d7a;
+    --shadow: 0 20px 60px -20px rgba(124,92,255,.25);
   }
-  *{box-sizing:border-box}
+  *{box-sizing:border-box; margin:0; padding:0}
   body{
-    margin:0; font-family:'Vazirmatn', Tahoma, sans-serif;
-    background:radial-gradient(1200px 600px at 80% -10%, #1b1030 0%, transparent 60%), var(--bg);
-    color:var(--text); min-height:100vh; padding:32px 16px;
+    font-family:'Vazirmatn', Tahoma, sans-serif;
+    background:
+      radial-gradient(900px 500px at 15% -10%, rgba(124,92,255,.18), transparent 60%),
+      radial-gradient(700px 500px at 100% 10%, rgba(0,224,164,.10), transparent 60%),
+      var(--bg);
+    color:var(--text); min-height:100vh;
+    display:flex; align-items:center; justify-content:center;
+    padding:40px 16px;
   }
-  .wrap{max-width:640px; margin:0 auto}
-  h1{font-size:1.6rem; margin-bottom:4px}
-  p.sub{color:var(--muted); margin-top:0; margin-bottom:28px; line-height:1.8}
+  .container{width:100%; max-width:520px}
+  .brand{display:flex; align-items:center; gap:12px; margin-bottom:28px; justify-content:center}
+  .brand .logo{
+    width:44px; height:44px; border-radius:12px;
+    background:linear-gradient(135deg, var(--accent), #4834d4);
+    display:flex; align-items:center; justify-content:center; font-size:1.4rem;
+    box-shadow: var(--shadow);
+  }
+  .brand h1{font-size:1.35rem; font-weight:700}
+  .brand p{font-size:.8rem; color:var(--muted)}
+
   .card{
-    background:var(--card); border:1px solid var(--border); border-radius:16px;
-    padding:24px; margin-bottom:20px;
+    background:var(--card); border:1px solid var(--card-border); border-radius:20px;
+    padding:28px; box-shadow: var(--shadow);
   }
-  label{display:block; margin-bottom:8px; font-size:.9rem; color:var(--muted)}
+  label{display:block; font-size:.82rem; color:var(--muted); margin-bottom:8px; font-weight:500}
+  .field{margin-bottom:18px}
+  .input-wrap{position:relative}
   input[type=text], input[type=password]{
-    width:100%; padding:12px 14px; border-radius:10px; border:1px solid var(--border);
-    background:#0d0f14; color:var(--text); font-size:.95rem; outline:none;
+    width:100%; padding:13px 44px 13px 14px; border-radius:12px;
+    border:1px solid var(--card-border); background:var(--bg2); color:var(--text);
+    font-size:.92rem; outline:none; transition:.15s; font-family:inherit;
   }
-  input:focus{border-color:var(--accent)}
-  .toggle{display:flex; align-items:center; gap:8px; margin-top:8px; font-size:.8rem; color:var(--muted); cursor:pointer}
-  button{
-    width:100%; padding:14px; border:none; border-radius:10px; font-size:1rem; font-weight:600;
-    cursor:pointer; margin-top:16px; background:linear-gradient(135deg, var(--accent), #4834d4);
-    color:#fff; transition:.2s;
+  input:focus{border-color:var(--accent); box-shadow:0 0 0 3px rgba(124,92,255,.15)}
+  .eye{
+    position:absolute; left:12px; top:50%; transform:translateY(-50%);
+    cursor:pointer; color:var(--muted); font-size:1rem; user-select:none;
   }
-  button:disabled{opacity:.5; cursor:not-allowed}
-  button:hover:not(:disabled){filter:brightness(1.1)}
-  .steps{margin-top:20px}
+  .hint{font-size:.72rem; color:var(--muted); margin-top:6px; line-height:1.6}
+
+  button.primary{
+    width:100%; padding:15px; border:none; border-radius:12px; font-size:.95rem; font-weight:700;
+    cursor:pointer; margin-top:6px; color:#0a0b0f;
+    background:linear-gradient(135deg, var(--accent2), #00b389);
+    transition:.15s; font-family:inherit;
+  }
+  button.primary:hover:not(:disabled){filter:brightness(1.08); transform:translateY(-1px)}
+  button.primary:disabled{opacity:.45; cursor:not-allowed; transform:none}
+
+  .steps{margin-top:22px; display:none; flex-direction:column; gap:2px}
   .step{
-    display:flex; align-items:center; gap:12px; padding:10px 0; font-size:.9rem; color:var(--muted);
+    display:flex; align-items:center; gap:12px; padding:11px 4px; font-size:.86rem; color:var(--muted);
+    border-radius:8px; transition:.2s;
   }
-  .step .dot{
-    width:10px; height:10px; border-radius:50%; background:var(--border); flex-shrink:0;
+  .step .icon{
+    width:22px; height:22px; border-radius:50%; flex-shrink:0; display:flex; align-items:center;
+    justify-content:center; font-size:.7rem; border:2px solid var(--card-border); background:var(--bg2);
   }
-  .step.active .dot{background:var(--accent); box-shadow:0 0 8px var(--accent)}
-  .step.done .dot{background:var(--accent2)}
+  .step.active{color:var(--text)}
+  .step.active .icon{border-color:var(--accent); box-shadow:0 0 0 4px rgba(124,92,255,.15)}
+  .step.active .icon::after{content:''; width:8px; height:8px; border-radius:50%; background:var(--accent); animation:pulse 1.1s infinite}
   .step.done{color:var(--text)}
-  .step.error .dot{background:var(--danger)}
-  .result{
-    display:none; text-align:center; padding:28px 20px;
+  .step.done .icon{background:var(--accent2); border-color:var(--accent2); color:#0a0b0f}
+  .step.error .icon{background:var(--accent3); border-color:var(--accent3); color:#fff}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+
+  .err{
+    display:none; margin-top:14px; padding:12px 14px; border-radius:10px;
+    background:rgba(255,93,122,.1); border:1px solid rgba(255,93,122,.3);
+    color:#ff9aac; font-size:.82rem; line-height:1.7; white-space:pre-wrap;
   }
-  .result.show{display:block}
+
+  .result{display:none; text-align:center; padding:8px 4px}
+  .result .emoji{font-size:2.6rem; margin-bottom:10px}
+  .result h2{font-size:1.2rem; margin-bottom:6px}
+  .result p{color:var(--muted); font-size:.85rem; margin-bottom:18px}
   .result a{
-    display:inline-block; margin-top:14px; padding:14px 28px; border-radius:10px;
-    background:var(--accent2); color:#0f1115; font-weight:700; text-decoration:none;
+    display:block; padding:15px; border-radius:12px; text-decoration:none;
+    background:linear-gradient(135deg, var(--accent2), #00b389); color:#0a0b0f;
+    font-weight:700; font-size:.92rem;
   }
   .creds{
-    background:#0d0f14; border:1px dashed var(--border); border-radius:10px; padding:14px;
-    margin-top:16px; font-size:.85rem; color:var(--muted); text-align:right;
+    margin-top:16px; background:var(--bg2); border:1px dashed var(--card-border);
+    border-radius:10px; padding:13px; font-size:.78rem; color:var(--muted); text-align:right; line-height:1.9;
   }
-  .err{color:var(--danger); font-size:.85rem; margin-top:10px; white-space:pre-wrap}
-  .foot{color:var(--muted); font-size:.75rem; text-align:center; margin-top:24px; line-height:1.8}
-  .badge{display:inline-block; background:#1b1e27; border:1px solid var(--border); border-radius:6px; padding:2px 8px; font-size:.7rem; color:var(--accent2)}
+  .creds b{color:var(--accent2)}
+
+  .footer{text-align:center; font-size:.72rem; color:var(--muted); margin-top:22px; line-height:1.9}
+  .footer a{color:var(--accent2); text-decoration:none}
+  .badge{
+    display:inline-flex; align-items:center; gap:5px; background:rgba(0,224,164,.1);
+    border:1px solid rgba(0,224,164,.25); color:var(--accent2); border-radius:20px;
+    padding:4px 12px; font-size:.72rem; margin-bottom:20px;
+  }
 </style>
 </head>
 <body>
-<div class="wrap">
-  <h1>🚀 نصب خودکار پنل X-UI</h1>
-  <p class="sub">
-    توکن Railway خودتون رو وارد کنید تا پنل به‌صورت خودکار روی اکانت شما ساخته و دیپلوی بشه.
-    <br><span class="badge">توکن هیچ‌جا ذخیره نمی‌شه</span> — فقط توی همین صفحه و همین تب استفاده می‌شه.
-  </p>
+<div class="container">
+  <div class="brand">
+    <div class="logo">🚀</div>
+    <div>
+      <h1>نصب خودکار پنل X-UI</h1>
+      <p>روی زیرساخت شخصی شما در Railway</p>
+    </div>
+  </div>
 
   <div class="card" id="formCard">
-    <label for="token">Railway API Token</label>
-    <input type="password" id="token" placeholder="rlwy_xxxxxxxxxxxxxxxxxxxx" autocomplete="off">
-    <div class="toggle" onclick="toggleTokenView()">
-      <input type="checkbox" id="showToggle" onclick="toggleTokenView()"> نمایش توکن
+    <div class="badge">🔒 توکن شما ذخیره نمی‌شود</div>
+
+    <div class="field">
+      <label>Railway API Token</label>
+      <div class="input-wrap">
+        <input type="password" id="token" placeholder="rlwy_xxxxxxxxxxxxxxxxxxxx" autocomplete="off">
+        <span class="eye" id="eyeBtn" onclick="toggleTokenView()">👁</span>
+      </div>
+      <div class="hint">از داشبورد Railway → Account Settings → Tokens بسازید</div>
     </div>
 
-    <div style="margin-top:16px">
-      <label for="projName">اسم پروژه (اختیاری)</label>
+    <div class="field">
+      <label>اسم پروژه (اختیاری)</label>
       <input type="text" id="projName" placeholder="x-ui-panel" autocomplete="off">
     </div>
 
-    <button id="deployBtn" onclick="startDeploy()">شروع نصب خودکار</button>
+    <button class="primary" id="deployBtn" onclick="startDeploy()">شروع نصب خودکار ←</button>
 
-    <div class="steps" id="steps" style="display:none">
-      <div class="step" id="step-auth"><div class="dot"></div> بررسی اعتبار توکن</div>
-      <div class="step" id="step-project"><div class="dot"></div> ساخت پروژه روی Railway</div>
-      <div class="step" id="step-service"><div class="dot"></div> اتصال به ریپوی GitHub و ساخت سرویس</div>
-      <div class="step" id="step-vars"><div class="dot"></div> تنظیم پورت و متغیرها</div>
-      <div class="step" id="step-deploy"><div class="dot"></div> در حال دیپلوی (ممکنه ۱-۲ دقیقه طول بکشه)</div>
-      <div class="step" id="step-domain"><div class="dot"></div> ساخت دامین اختصاصی</div>
+    <div class="steps" id="steps">
+      <div class="step" id="step-auth"><div class="icon"></div><span>بررسی اعتبار توکن</span></div>
+      <div class="step" id="step-project"><div class="icon"></div><span>ساخت پروژه در Railway</span></div>
+      <div class="step" id="step-service"><div class="icon"></div><span>اتصال به ریپوی X-UI</span></div>
+      <div class="step" id="step-vars"><div class="icon"></div><span>تنظیم پورت پنل</span></div>
+      <div class="step" id="step-deploy"><div class="icon"></div><span>دیپلوی (۱-۲ دقیقه)</span></div>
+      <div class="step" id="step-domain"><div class="icon"></div><span>ساخت دامین اختصاصی</span></div>
     </div>
+
     <div class="err" id="errBox"></div>
   </div>
 
   <div class="card result" id="resultCard">
-    <div style="font-size:2.5rem">🎉</div>
+    <div class="emoji">🎉</div>
     <h2>پنل شما آماده‌ست!</h2>
-    <p style="color:var(--muted)">برای ورود به پنل روی دکمه زیر بزنید</p>
+    <p>برای ورود روی دکمه‌ی زیر بزنید</p>
     <a id="panelLink" href="#" target="_blank">ورود به پنل ←</a>
     <div class="creds">
-      یوزرنیم و پسورد پیش‌فرض X-UI: <b>admin / admin</b><br>
-      🔒 حتماً بعد از اولین ورود، پسورد رو از تنظیمات پنل عوض کنید.
+      یوزرنیم و پسورد پیش‌فرض: <b>admin / admin</b><br>
+      🔒 بعد از اولین ورود حتماً پسورد رو عوض کنید.
     </div>
   </div>
 
-  <p class="foot">
-    این ابزار متن‌باز از ریپوی
-    <a href="https://github.com/arvin341az-glitch/railway-x3ui" target="_blank" style="color:var(--accent2)">railway-x3ui</a>
-    دیپلوی می‌کنه. توکن شما مستقیماً از مرورگرتون به Railway ارسال می‌شه و روی هیچ سروری ذخیره نمی‌شه.
-  </p>
+  <div class="footer">
+    منبع باز از ریپوی <a href="https://github.com/arvin341az-glitch/railway-x3ui" target="_blank">railway-x3ui</a>
+    · توکن شما فقط برای همین یک درخواست استفاده و بلافاصله دور ریخته می‌شود
+  </div>
 </div>
 
 <script>
-const RAILWAY_API = "https://backboard.railway.app/graphql/v2";
-const REPO = "arvin341az-glitch/railway-x3ui";
-const TARGET_PORT = 2053;
-
 function toggleTokenView(){
   const el = document.getElementById('token');
-  el.type = document.getElementById('showToggle').checked ? 'text' : 'password';
+  el.type = el.type === 'password' ? 'text' : 'password';
 }
 
 function setStep(id, state){
-  const el = document.getElementById(id);
+  const el = document.getElementById('step-' + id);
+  if(!el) return;
   el.classList.remove('active','done','error');
   if(state) el.classList.add(state);
+  const icon = el.querySelector('.icon');
+  icon.textContent = state === 'done' ? '✓' : state === 'error' ? '✕' : '';
 }
 
 function showError(msg){
-  document.getElementById('errBox').textContent = msg;
+  const box = document.getElementById('errBox');
+  box.style.display = msg ? 'block' : 'none';
+  box.textContent = msg;
 }
-
-async function gql(token, query, variables){
-  const res = await fetch(RAILWAY_API, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "Authorization": "Bearer " + token
-    },
-    body: JSON.stringify({ query, variables })
-  });
-  if(!res.ok){
-    const text = await res.text();
-    throw new Error("HTTP " + res.status + ": " + text);
-  }
-  const data = await res.json();
-  if(data.errors){
-    throw new Error(data.errors.map(e=>e.message).join("; "));
-  }
-  return data.data;
-}
-
-async function sleep(ms){ return new Promise(r=>setTimeout(r, ms)); }
 
 async function startDeploy(){
   const token = document.getElementById('token').value.trim();
-  const projName = document.getElementById('projName').value.trim() || "x-ui-panel";
+  const projectName = document.getElementById('projName').value.trim();
   const btn = document.getElementById('deployBtn');
-  showError("");
+  showError('');
 
   if(!token){
-    showError("لطفاً توکن Railway رو وارد کنید.");
+    showError('لطفاً توکن Railway رو وارد کنید.');
     return;
   }
 
   btn.disabled = true;
-  document.getElementById('steps').style.display = 'block';
+  btn.textContent = 'در حال اجرا...';
+  document.getElementById('steps').style.display = 'flex';
 
   try {
-    // 1. verify token
-    setStep('step-auth', 'active');
-    await gql(token, `query { me { id name email } }`);
-    setStep('step-auth', 'done');
+    const res = await fetch('/api/deploy', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({ token, projectName })
+    });
 
-    // 2. create project
-    setStep('step-project', 'active');
-    const projData = await gql(token, `
-      mutation($input: ProjectCreateInput!) {
-        projectCreate(input: $input) { id name }
-      }`, { input: { name: projName } });
-    const projectId = projData.projectCreate.id;
-    setStep('step-project', 'done');
+    const reader = res.body.getReader();
+    const decoder = new TextDecoder();
+    let buffer = '';
 
-    // get default environment id
-    const envData = await gql(token, `
-      query($id: String!) {
-        project(id: $id) {
-          environments { edges { node { id name } } }
+    while(true){
+      const { done, value } = await reader.read();
+      if(done) break;
+      buffer += decoder.decode(value, { stream:true });
+
+      const chunks = buffer.split('\n\n');
+      buffer = chunks.pop();
+
+      for(const chunk of chunks){
+        const lines = chunk.split('\n');
+        let event = 'message', data = '';
+        for(const line of lines){
+          if(line.startsWith('event: ')) event = line.slice(7);
+          if(line.startsWith('data: ')) data = line.slice(6);
         }
-      }`, { id: projectId });
-    const environmentId = envData.project.environments.edges[0].node.id;
+        if(!data) continue;
+        const payload = JSON.parse(data);
 
-    // 3. create service from GitHub repo
-    setStep('step-service', 'active');
-    const svcData = await gql(token, `
-      mutation($input: ServiceCreateInput!) {
-        serviceCreate(input: $input) { id name }
-      }`, { input: { projectId, source: { repo: REPO } } });
-    const serviceId = svcData.serviceCreate.id;
-    setStep('step-service', 'done');
-
-    // 4. set PORT variable
-    setStep('step-vars', 'active');
-    await gql(token, `
-      mutation($input: VariableUpsertInput!) {
-        variableUpsert(input: $input)
-      }`, { input: { projectId, environmentId, serviceId, name: "PORT", value: String(TARGET_PORT) } });
-    setStep('step-vars', 'done');
-
-    // 5. wait for deployment to succeed
-    setStep('step-deploy', 'active');
-    let deployStatus = null;
-    for(let i=0; i<40; i++){ // up to ~3-4 minutes
-      await sleep(6000);
-      const depData = await gql(token, `
-        query($input: DeploymentsInput!) {
-          deployments(input: $input, first: 1) {
-            edges { node { id status } }
-          }
-        }`, { input: { projectId, serviceId, environmentId } });
-      const edges = depData.deployments.edges;
-      if(edges.length > 0){
-        deployStatus = edges[0].node.status;
-        if(deployStatus === "SUCCESS") break;
-        if(deployStatus === "FAILED" || deployStatus === "CRASHED"){
-          throw new Error("دیپلوی با خطا مواجه شد: " + deployStatus);
+        if(event === 'step'){
+          setStep(payload.id, payload.status);
+        } else if(event === 'error'){
+          document.querySelectorAll('.step.active').forEach(s => s.classList.replace('active','error'));
+          showError('خطا: ' + payload.message);
+          btn.disabled = false;
+          btn.textContent = 'تلاش مجدد';
+        } else if(event === 'complete'){
+          const link = document.getElementById('panelLink');
+          link.href = payload.url;
+          link.textContent = 'ورود به پنل ←';
+          document.getElementById('formCard').style.display = 'none';
+          document.getElementById('resultCard').style.display = 'block';
         }
       }
     }
-    if(deployStatus !== "SUCCESS"){
-      throw new Error("دیپلوی بیش از حد انتظار طول کشید. لطفاً چند دقیقه دیگه از داشبورد Railway وضعیت رو چک کنید.");
-    }
-    setStep('step-deploy', 'done');
-
-    // 6. generate domain
-    setStep('step-domain', 'active');
-    const domainData = await gql(token, `
-      mutation($input: ServiceDomainCreateInput!) {
-        serviceDomainCreate(input: $input) { domain }
-      }`, { input: { environmentId, serviceId, targetPort: TARGET_PORT } });
-    const domain = domainData.serviceDomainCreate.domain;
-    setStep('step-domain', 'done');
-
-    // show result
-    const link = document.getElementById('panelLink');
-    link.href = "https://" + domain + "/";
-    link.textContent = "ورود به پنل: " + domain;
-    document.getElementById('formCard').style.display = 'none';
-    document.getElementById('resultCard').classList.add('show');
-
   } catch(err){
-    console.error(err);
-    document.querySelectorAll('.step.active').forEach(s => s.classList.replace('active','error'));
-    showError("خطا: " + err.message + "\n\nاگه پیام خطا مربوط به CORS بود، یعنی Railway اجازه‌ی تماس مستقیم از مرورگر رو نمی‌ده و باید از یه پروکسی سبک (مثل Cloudflare Worker) استفاده کنید.");
+    showError('خطای شبکه: ' + err.message);
     btn.disabled = false;
+    btn.textContent = 'تلاش مجدد';
   }
 }
 </script>
