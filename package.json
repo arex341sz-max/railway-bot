@@ -1,0 +1,16 @@
+{
+  "name": "x3ui-autodeploy",
+  "version": "1.0.0",
+  "description": "One-click X-UI panel deployer for Railway",
+  "main": "server.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}
